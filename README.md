@@ -7,3 +7,5 @@ The objective is to request the search data from the user, send it to the backen
 ## Built with
 
 - React
+- Bootstrap
+- Material-UI

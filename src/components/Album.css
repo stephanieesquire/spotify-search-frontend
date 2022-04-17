@@ -1,0 +1,9 @@
+.album-img {
+    height: 300px;
+}
+
+@media (max-width: 767px) {
+    .album-img {
+        height: 500px;
+    }
+}

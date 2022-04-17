@@ -47,7 +47,7 @@ function SearchArtistAlbums() {
           type="submit"
           variant="contained"
           color="success"
-          className="mt-4"
+          className="mt-4 mb-5"
           endIcon={<SearchIcon />}
         >
           Search
@@ -55,9 +55,12 @@ function SearchArtistAlbums() {
       </Box>
 
       {albums && (
-        <div id="albums" className="row mt-5">
+        <div id="albums" className="row ">
           {albums.map((album) => (
-            <div key={album.id} className="col-3">
+            <div
+              key={album.id}
+              className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-5"
+            >
               <Album album={album} />
             </div>
           ))}

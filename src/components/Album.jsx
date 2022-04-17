@@ -1,7 +1,7 @@
 import React from "react";
 
-function Album() {
-  return <div>Album</div>;
+function Album({ album }) {
+  return <div>{album.name}</div>;
 }
 
 export default Album;

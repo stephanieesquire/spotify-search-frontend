@@ -4,13 +4,19 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import Album from "../components/Album";
+import Spinner from "react-bootstrap/Spinner";
 
 function SearchArtistAlbums() {
   const [artistToSearch, setArtistToSearch] = useState("");
-  const [albums, setAlbums] = useState("");
+  const [albums, setAlbums] = useState([]);
+  const [backendRequest, setBackendRequest] = useState(false);
+  const [notResultsFound, setNotResultsFound] = useState(false);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+    setAlbums([]);
+    setBackendRequest(true);
+    setNotResultsFound(false);
 
     const resultAlbums = await fetch(
       `${process.env.REACT_APP_BACKEND_URL}/artist/albums/${artistToSearch}`,
@@ -20,6 +26,8 @@ function SearchArtistAlbums() {
     );
     const dataAlbums = await resultAlbums.json();
     setAlbums(dataAlbums);
+    setBackendRequest(false);
+    dataAlbums.length === 0 && setNotResultsFound(true);
     console.log(dataAlbums);
   };
 
@@ -53,8 +61,13 @@ function SearchArtistAlbums() {
           Search
         </Button>
       </Box>
+      {backendRequest && (
+        <Spinner animation="border" role="status" variant="success"></Spinner>
+      )}
 
-      {albums && (
+      {notResultsFound && <p>Not results found</p>}
+
+      {albums.length > 0 && (
         <div id="albums" className="row ">
           {albums.map((album) => (
             <div

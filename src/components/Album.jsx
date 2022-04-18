@@ -14,7 +14,7 @@ function Album({ album }) {
           component="img"
           image={album.images[1].url}
           alt={album.name}
-          className="album-img"
+          className="img-fluid album-img"
         />
         <CardContent className="text-start">
           <Typography

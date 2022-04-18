@@ -44,7 +44,7 @@ function SearchArtistAlbums() {
 
   return (
     <div className="container">
-      <h4 className="display-5 my-4">Artist´s albums</h4>
+      <h4 className="display-5 my-4">Artists albums</h4>
       <Box
         component="form"
         sx={{

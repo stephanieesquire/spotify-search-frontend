@@ -10,25 +10,36 @@ function SearchArtistAlbums() {
   const [artistToSearch, setArtistToSearch] = useState("");
   const [albums, setAlbums] = useState([]);
   const [backendRequest, setBackendRequest] = useState(false);
-  const [notResultsFound, setNotResultsFound] = useState(false);
+  const [apiStatus, setApiStatus] = useState(0);
+  const [showValidations, setShowValidations] = useState(false);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+    setShowValidations(false);
+    setApiStatus(0);
     setAlbums([]);
-    setBackendRequest(true);
-    setNotResultsFound(false);
 
-    const resultAlbums = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/artist/albums/${artistToSearch}`,
-      {
-        method: "GET",
+    if (artistToSearch !== "") {
+      setBackendRequest(true);
+
+      try {
+        const resultAlbums = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/artist/albums/${artistToSearch}`,
+          {
+            method: "GET",
+          }
+        );
+        const dataAlbums = await resultAlbums.json();
+
+        setAlbums(dataAlbums);
+        setBackendRequest(false);
+        setApiStatus(dataAlbums.code);
+      } catch (error) {
+        alert(error);
       }
-    );
-    const dataAlbums = await resultAlbums.json();
-    setAlbums(dataAlbums);
-    setBackendRequest(false);
-    dataAlbums.length === 0 && setNotResultsFound(true);
-    console.log(dataAlbums);
+    } else {
+      setShowValidations(true);
+    }
   };
 
   return (
@@ -51,21 +62,30 @@ function SearchArtistAlbums() {
           value={artistToSearch}
           onChange={(ev) => setArtistToSearch(ev.target.value)}
         />
+
         <Button
           type="submit"
           variant="contained"
           color="success"
-          className="mt-4 mb-5"
+          className="mt-4 mb-4"
           endIcon={<SearchIcon />}
         >
           Search
         </Button>
       </Box>
+
+      {showValidations && (
+        <span className="text-start text-danger fw-bold ">
+          Artist name is required
+        </span>
+      )}
+
       {backendRequest && (
         <Spinner animation="border" role="status" variant="success"></Spinner>
       )}
 
-      {notResultsFound && <p>Not results found</p>}
+      {apiStatus === 404 && <p>Not results found</p>}
+      {apiStatus === 400 && <p>An error has ocurred</p>}
 
       {albums.length > 0 && (
         <div id="albums" className="row ">
